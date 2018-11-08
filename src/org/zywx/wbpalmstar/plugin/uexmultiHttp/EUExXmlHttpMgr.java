@@ -291,9 +291,15 @@ public class EUExXmlHttpMgr extends EUExBase {
             return false;
         }
         String inXmlHttpOpCode = parm[0];
-        HttpTask xmlHttp = mXmlHttpMap.get(inXmlHttpOpCode);
+        final HttpTask xmlHttp = mXmlHttpMap.get(inXmlHttpOpCode);
         if (null != xmlHttp) {
-            xmlHttp.cancel();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    xmlHttp.cancel();
+                }
+            }).start();
             mXmlHttpMap.remove(inXmlHttpOpCode);
             mNeedVerifyMap.remove(inXmlHttpOpCode);
         }
